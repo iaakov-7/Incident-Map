@@ -1,4 +1,4 @@
-import { tr } from "zod/v4/locales";
+import { userRepo } from "../repository/user.repo.js";
 import { createAuthService } from "../services/auth.service.js";
 import { generateToken } from "../utils/generateToken.js";
 
@@ -30,4 +30,19 @@ export async function handleLogin(
     httpOnly: true,
   });
   res.json({ success: true, data: safeUser });
+}
+
+export async function handleGetUser(req, res) {
+  const { email } = req.user;
+  const user = await userRepo.findUserByEmail(email);
+  const { passwordHash, ...safeUser } = user;
+  res.json({ success: true, data: safeUser });
+}
+
+export function handleLogout(
+  req,
+  /**@type {import("express").Response} */ res,
+) {
+  res.clearCookie("token");
+  res.json({ success: true });
 }
