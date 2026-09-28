@@ -7,4 +7,3 @@ export function errorHandler(err, req, res, next) {
     message: err.statusCode ? err.message : "Server internal error",
   });
 }
-ד;

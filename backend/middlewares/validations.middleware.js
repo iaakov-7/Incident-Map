@@ -4,7 +4,7 @@ export const validateBody = (schema) => {
       schema.parse(req.body);
       next();
     } catch (err) {
-      const error = new Error(err.errors[0].message);
+      const error = new Error("validation faild");
       error.statusCode = 400;
       throw error;
     }
