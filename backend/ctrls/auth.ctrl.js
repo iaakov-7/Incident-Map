@@ -1,7 +1,9 @@
+import { tr } from "zod/v4/locales";
 import { createAuthService } from "../services/auth.service.js";
 import { generateToken } from "../utils/generateToken.js";
 
 const authService = createAuthService();
+
 export async function handleRegister(
   req,
   /** @type {import("express").Response} */ res,
@@ -14,4 +16,18 @@ export async function handleRegister(
     httpOnly: true,
   });
   res.status(201).json({ success: true, data: safeUser });
+}
+
+export async function handleLogin(
+  req,
+  /** @type {import("express").Response} */ res,
+) {
+  const { email, password } = req.body;
+  const user = await authService.login(email, password);
+  const { passwordHash, ...safeUser } = user;
+  const token = generateToken(safeUser);
+  res.cookie("token", token, {
+    httpOnly: true,
+  });
+  res.json({ success: true, data: safeUser });
 }

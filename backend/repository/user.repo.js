@@ -8,4 +8,9 @@ async function insertUser(newUser) {
   return createdUser;
 }
 
-export const userRepo = { insertUser };
+async function findUserByEmail(email) {
+  const user = await collection.findOne({ email: email });
+  return user;
+}
+
+export const userRepo = { insertUser, findUserByEmail };
