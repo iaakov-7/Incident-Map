@@ -12,3 +12,12 @@ export const incidentSchema = z.object({
     "מיקום צריך להיות אובייקט עם נקודות אורך או רוחב",
   ),
 });
+
+export const incidentSchemaForUpdate = incidentSchema.partial().extend({
+  status: z
+    .enum(
+      ["open", "in_progress", "closed"],
+      "סטטוס צריך להיות open | in_progrss | closed",
+    )
+    .optional(),
+});
