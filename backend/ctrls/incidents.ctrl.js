@@ -30,6 +30,7 @@ export async function handleUpdateIncident(req, res) {
     throw error;
   }
   const toUpdate = req.body;
+  toUpdate.updatedAt = new Date().toLocaleString();
   const io = req.app.get("io");
   const incident = await incidentRepo.findIncidentById(id);
   if (req.user.role !== "admin" && req.user.id !== incident.createdBy) {
@@ -59,4 +60,13 @@ export async function handleDeleteIncident(req, res) {
   const result = await incidentRepo.deleteIncident(id);
   io.emit("incident:deleted", id);
   res.json({ success: true, data: id });
+}
+
+export async function handleGetIncidentById(req, res) {}
+
+export async function handleGetIncidents(req, res) {
+  const query = req.query;
+  console.log(query);
+  const result = await incidentRepo.getIncidents(query);
+  res.json({ success: true, data: result });
 }

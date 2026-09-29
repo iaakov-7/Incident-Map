@@ -23,6 +23,11 @@ async function findIncidentById(id) {
   return result;
 }
 
+async function getIncidents(query = {}) {
+  const result = await collection.find(query).toArray();
+  return result;
+}
+
 async function deleteIncident(id) {
   const result = await collection.deleteOne({ _id: new ObjectId(id) });
   return result;
@@ -33,4 +38,5 @@ export const incidentRepo = {
   updateIncident,
   findIncidentById,
   deleteIncident,
+  getIncidents,
 };
