@@ -41,3 +41,22 @@ export async function handleUpdateIncident(req, res) {
   io.emit("incident:updated", updatedIncident);
   res.json({ success: true, data: updatedIncident });
 }
+
+export async function handleDeleteIncident(req, res) {
+  const { id } = req.params;
+  if (!ObjectId.isValid(id)) {
+    const error = new Error("Invalid id");
+    error.statusCode = 400;
+    throw error;
+  }
+  const io = req.app.get("io");
+  const incident = await incidentRepo.findIncidentById(id);
+  if (req.user.role !== "admin" && req.user.id !== incident.createdBy) {
+    const error = new Error("Forbiden");
+    error.statusCode = 403;
+    throw error;
+  }
+  const result = await incidentRepo.deleteIncident(id);
+  io.emit("incident:deleted", id);
+  res.json({ success: true, data: id });
+}

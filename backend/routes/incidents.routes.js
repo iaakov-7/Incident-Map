@@ -7,6 +7,7 @@ import {
 } from "../schemas/incident.schema.js";
 import {
   handleCreateIncident,
+  handleDeleteIncident,
   handleUpdateIncident,
 } from "../ctrls/incidents.ctrl.js";
 
@@ -25,3 +26,5 @@ router.patch(
   validateBody(incidentSchemaForUpdate),
   handleUpdateIncident,
 );
+
+router.delete("/:id", verifyToken, handleDeleteIncident);
