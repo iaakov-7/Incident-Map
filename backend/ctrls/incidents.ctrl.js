@@ -62,11 +62,24 @@ export async function handleDeleteIncident(req, res) {
   res.json({ success: true, data: id });
 }
 
-export async function handleGetIncidentById(req, res) {}
+export async function handleGetIncidentById(req, res) {
+  const { id } = req.params;
+  if (!ObjectId.isValid(id)) {
+    const error = new Error("Invalid id");
+    error.statusCode = 400;
+    throw error;
+  }
+  const result = await incidentRepo.findIncidentById(id);
+  if (!result) {
+    const error = new Error("Incident not found");
+    error.statusCode = 404;
+    throw error;
+  }
+  res.json({ success: true, data: result });
+}
 
 export async function handleGetIncidents(req, res) {
   const query = req.query;
-  console.log(query);
   const result = await incidentRepo.getIncidents(query);
   res.json({ success: true, data: result });
 }

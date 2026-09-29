@@ -8,6 +8,7 @@ import {
 import {
   handleCreateIncident,
   handleDeleteIncident,
+  handleGetIncidentById,
   handleGetIncidents,
   handleUpdateIncident,
 } from "../ctrls/incidents.ctrl.js";
@@ -29,5 +30,7 @@ router.patch(
 );
 
 router.get("/", verifyToken, handleGetIncidents);
+
+router.get("/:id", verifyToken, handleGetIncidentById);
 
 router.delete("/:id", verifyToken, handleDeleteIncident);
