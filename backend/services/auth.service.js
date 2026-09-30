@@ -5,7 +5,7 @@ export function createAuthService(repo = userRepo) {
   async function createUser(email, password) {
     const isEmail = await repo.findUserByEmail(email);
     if (isEmail) {
-      const error = new Error(`Email: ${email} is already exists`);
+      const error = new Error(`מייל: ${email} כבר קיים`);
       error.statusCode = 409;
       throw error;
     }
@@ -23,7 +23,7 @@ export function createAuthService(repo = userRepo) {
   async function login(email, password) {
     const user = await repo.findUserByEmail(email);
     if (!user) {
-      const error = new Error(`User with email ${email} not found`);
+      const error = new Error(`לא נמצא משתמש עם מייל ${email}`);
       error.statusCode = 404;
       throw error;
     }
