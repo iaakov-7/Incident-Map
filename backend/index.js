@@ -2,6 +2,7 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import "dotenv/config";
 import http from "http";
+import cors from "cors";
 import { Server } from "socket.io";
 import { router as autoRouter } from "./routes/auth.routes.js";
 import { router as incidentsRouter } from "./routes/incidents.routes.js";
@@ -11,7 +12,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: ["*"],
+    origin: "http://localhost:5173",
     credentials: true,
   },
 });
@@ -23,6 +24,12 @@ io.on("connection", (socket) => {
   });
 });
 app.set("io", io);
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  }),
+);
 app.use(express.json());
 app.use(cookieParser());
 app.use("/auth", autoRouter);

@@ -8,7 +8,7 @@ export const incidentSchema = z.object({
     "fire | flood | accident | medical | other קטוגריה צריכה להיות או",
   ),
   location: z.object(
-    { lat: z.number(), lng: z.number() },
+    { lat: z.number().min(-90).max(90), lng: z.number().min(-180).max(180) },
     "מיקום צריך להיות אובייקט עם נקודות אורך או רוחב",
   ),
 });
