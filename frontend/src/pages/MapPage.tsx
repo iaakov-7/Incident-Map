@@ -3,7 +3,7 @@ import { api } from "../api";
 import type { Response } from "../types";
 import { useIncidentsStore } from "../store/useIncidentStore";
 import type { AxiosError } from "axios";
-import { MapContainer, TileLayer, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
 const MapPage = () => {
@@ -31,17 +31,33 @@ const MapPage = () => {
   if (isLoading) return <p>טוען נתונים...</p>;
   if (errorMessage) return <p>{errorMessage}</p>;
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+      }}
+    >
       <MapContainer
         center={[31.7838, 35.2205]}
         zoom={13}
-        style={{ height: "100vh", width: "100vw" }}
-        scrollWheelZoom={false}
+        style={{
+          marginTop: "50px",
+          height: "80vh",
+          width: "80vw",
+        }}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+        {incidents.map((inc) => (
+          <Marker position={[inc.location.lat, inc.location.lng]}>
+            <Popup>
+              <h3>{inc.title}</h3>
+              <p>{inc.description}</p>
+            </Popup>
+          </Marker>
+        ))}
       </MapContainer>
     </div>
   );
