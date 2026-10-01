@@ -1,7 +1,7 @@
 export interface Response {
   success: boolean;
   message?: string;
-  data?: object;
+  data?: object | Incident[];
 }
 
 interface Location {
@@ -23,7 +23,7 @@ export interface Incident {
 
 export interface IncidentsStore {
   incidents: Incident[];
-  setIncidents: (incidents: Incident[]) => void;
+  setIncidents: (incidents: Incident[] | any) => void;
   addIncident: (incident: Incident) => void;
   updateIncident: (incident: Incident) => void;
   removeIncident: (id: string) => void;
