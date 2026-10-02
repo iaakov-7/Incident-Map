@@ -18,6 +18,7 @@ const AuthForm = ({
       <input
         type="email"
         placeholder="מייל"
+        autoComplete="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />

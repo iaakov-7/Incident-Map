@@ -5,11 +5,16 @@ import { useIncidentsStore } from "../store/useIncidentStore";
 import type { AxiosError } from "axios";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import ClickMap from "../components/ClickMap";
+import CreateIncForm from "../components/CreateIncForm";
+import SocketMnager from "../components/SocketMnager";
 
 const MapPage = () => {
   const { setIncidents, incidents } = useIncidentsStore();
   const [isLoading, setIsLoading] = useState<boolean>();
   const [errorMessage, setErrorMessage] = useState<string>();
+  const [newLatlng, setNewLatlng] = useState<{ lat: number; lng: number }>();
+  const [isCreateForm, setIsCreateForm] = useState<boolean>(false);
   useEffect(() => {
     const fetch = async () => {
       try {
@@ -37,6 +42,7 @@ const MapPage = () => {
         justifyContent: "center",
       }}
     >
+      <SocketMnager />
       <MapContainer
         center={[31.7838, 35.2205]}
         zoom={13}
@@ -50,6 +56,13 @@ const MapPage = () => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+        <ClickMap
+          onMapClick={(latlng) => setNewLatlng(latlng)}
+          setIsCreateForm={setIsCreateForm}
+        />
+        {newLatlng && (
+          <Marker position={[newLatlng.lat, newLatlng.lng]}></Marker>
+        )}
         {incidents.map((inc) => (
           <Marker position={[inc.location.lat, inc.location.lng]}>
             <Popup>
@@ -59,6 +72,9 @@ const MapPage = () => {
           </Marker>
         ))}
       </MapContainer>
+      {isCreateForm && (
+        <CreateIncForm latlng={newLatlng} setIsCreateForm={setIsCreateForm} />
+      )}
     </div>
   );
 };
